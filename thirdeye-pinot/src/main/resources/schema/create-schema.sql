@@ -1,5 +1,5 @@
-create alias if not exists TO_UNIXTIME as $$ long unix_timestamp(java.sql.Timestamp timestamp) { return
-(long) (timestamp.getTime() / 1000L); } $$;
+# create alias if not exists TO_UNIXTIME as $$ long unix_timestamp(java.sql.Timestamp timestamp) { return
+# (long) (timestamp.getTime() / 1000L); } $$;
 
 create table if not exists generic_json_entity (
     id bigint(20) primary key auto_increment,
@@ -8,7 +8,7 @@ create table if not exists generic_json_entity (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index generic_json_entity_beanclass_idx on generic_json_entity(beanClass);
 
 create table if not exists anomaly_function_index (
@@ -22,7 +22,7 @@ create table if not exists anomaly_function_index (
     update_time timestamp default current_timestamp,
     version int(10),
     CONSTRAINT uc_functionName unique(function_name)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index anomaly_function_name_idx on anomaly_function_index(function_name);
 create index anomaly_function_base_id_idx ON anomaly_function_index(base_id);
 
@@ -37,7 +37,7 @@ create table if not exists job_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index job_status_idx on job_index(status);
 create index job_type_idx on job_index(type);
 create index job_config_id_idx on job_index(config_id);
@@ -55,7 +55,7 @@ create table if not exists task_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index task_status_idx on task_index(status);
 create index task_type_idx on task_index(type);
 create index task_job_idx on task_index(job_id);
@@ -71,7 +71,7 @@ create table if not exists anomaly_feedback_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index anomaly_feedback_base_id_idx ON anomaly_feedback_index(base_id);
 
 create table if not exists raw_anomaly_result_index (
@@ -87,7 +87,7 @@ create table if not exists raw_anomaly_result_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index raw_anomaly_result_function_idx on raw_anomaly_result_index(function_id);
 create index raw_anomaly_result_feedback_idx on raw_anomaly_result_index(anomaly_feedback_id);
 create index raw_anomaly_result_job_idx on raw_anomaly_result_index(job_id);
@@ -112,7 +112,7 @@ create table if not exists merged_anomaly_result_index (
     update_time timestamp default current_timestamp,
     child boolean,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index merged_anomaly_result_function_idx on merged_anomaly_result_index(function_id);
 create index merged_anomaly_result_feedback_idx on merged_anomaly_result_index(anomaly_feedback_id);
 create index merged_anomaly_result_metric_idx on merged_anomaly_result_index(metric_id);
@@ -131,7 +131,7 @@ create table if not exists dataset_config_index (
     update_time timestamp default current_timestamp,
     version int(10),
     CONSTRAINT uc_dataset unique(dataset)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index dataset_config_dataset_idx on dataset_config_index(dataset);
 create index dataset_config_active_idx on dataset_config_index(active);
 create index dataset_config_requires_completeness_check_idx on dataset_config_index(requires_completeness_check);
@@ -148,7 +148,7 @@ create table if not exists metric_config_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 ALTER TABLE `metric_config_index` ADD UNIQUE `unique_metric_index`(`name`, `dataset`);
 create index metric_config_name_idx on metric_config_index(name);
 create index metric_config_dataset_idx on metric_config_index(dataset);
@@ -165,21 +165,21 @@ create table if not exists override_config_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index override_config_target_entity_idx on override_config_index(target_entity);
 create index override_config_target_start_time_idx on override_config_index(start_time);
 create index override_config_base_id_idx ON override_config_index(base_id);
 
 create table if not exists alert_config_index (
-    active boolean,
-    name varchar(500) not null,
+                                                  active boolean,
+                                                  name varchar(500) not null,
     application VARCHAR(500) not null,
     base_id bigint(20) not null,
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10),
     CONSTRAINT uc_alert_name UNIQUE (name)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index alert_config_application_idx on alert_config_index(application);
 create index alert_config_name_idx on alert_config_index(name);
 create index alert_config_base_id_idx ON alert_config_index(base_id);
@@ -194,7 +194,7 @@ create table if not exists data_completeness_config_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 ALTER TABLE `data_completeness_config_index` ADD UNIQUE `data_completeness_config_unique_index`(`dataset`, `date_to_check_in_ms`);
 create index data_completeness_config_dataset_idx on data_completeness_config_index(dataset);
 create index data_completeness_config_date_idx on data_completeness_config_index(date_to_check_in_ms);
@@ -204,33 +204,33 @@ create index data_completeness_config_percent_idx on data_completeness_config_in
 create index data_completeness_config_base_id_idx ON data_completeness_config_index(base_id);
 
 create table if not exists event_index (
-  name VARCHAR (100),
-  event_type VARCHAR (100),
-  start_time bigint(20) not null,
-  end_time bigint(20) not null,
-  metric_name VARCHAR(200),
-  service_name VARCHAR (200),
-  base_id bigint(20) not null,
-  create_time timestamp,
-  update_time timestamp default current_timestamp,
-  version int(10)
-) ENGINE=InnoDB;
+    name VARCHAR (100),
+    event_type VARCHAR (100),
+    start_time bigint(20) not null,
+    end_time bigint(20) not null,
+    metric_name VARCHAR(200),
+    service_name VARCHAR (200),
+    base_id bigint(20) not null,
+    create_time timestamp,
+    update_time timestamp default current_timestamp,
+    version int(10)
+    ) ENGINE=InnoDB;
 create index event_event_type_idx on event_index(event_type);
 create index event_start_time_idx on event_index(start_time);
 create index event_end_time_idx on event_index(end_time);
 create index event_base_id_idx ON event_index(base_id);
 
 create table if not exists detection_status_index (
-  function_id bigint(20),
-  dataset varchar(200) not null,
-  date_to_check_in_ms bigint(20) not null,
-  date_to_check_in_sdf varchar(20),
-  detection_run boolean,
-  base_id bigint(20) not null,
-  create_time timestamp,
-  update_time timestamp default current_timestamp,
-  version int(10)
-) ENGINE=InnoDB;
+    function_id bigint(20),
+    dataset varchar(200) not null,
+    date_to_check_in_ms bigint(20) not null,
+    date_to_check_in_sdf varchar(20),
+    detection_run boolean,
+    base_id bigint(20) not null,
+    create_time timestamp,
+    update_time timestamp default current_timestamp,
+    version int(10)
+    ) ENGINE=InnoDB;
 ALTER TABLE `detection_status_index` ADD UNIQUE `detection_status_unique_index`(`function_id`, `date_to_check_in_sdf`);
 create index detection_status_dataset_idx on detection_status_index(dataset);
 create index detection_status_date_idx on detection_status_index(date_to_check_in_ms);
@@ -249,7 +249,7 @@ create table if not exists autotune_config_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index autotune_config_function_idx on autotune_config_index(function_id);
 create index autotune_config_autoTuneMethod_idx on autotune_config_index(autotune_method);
 create index autotune_config_performanceEval_idx on autotune_config_index(performance_evaluation_method);
@@ -263,7 +263,7 @@ create table if not exists classification_config_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 ALTER TABLE `classification_config_index` ADD UNIQUE `classification_config_unique_index`(`name`);
 create index classification_config_name_index on classification_config_index(name);
 create index classification_config_base_id_idx ON classification_config_index(base_id);
@@ -276,7 +276,7 @@ create table if not exists entity_to_entity_mapping_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB CHARSET=latin1;;
 ALTER TABLE `entity_to_entity_mapping_index` ADD UNIQUE `entity_mapping_unique_index`(`from_urn`, `to_urn`);
 create index entity_mapping_from_urn_idx on entity_to_entity_mapping_index(from_urn);
 create index entity_mapping_to_urn_idx on entity_to_entity_mapping_index(to_urn);
@@ -291,20 +291,20 @@ create table if not exists grouped_anomaly_results_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index grouped_anomaly_results_alert_config_id on grouped_anomaly_results_index(alert_config_id);
 create index grouped_anomaly_results_base_id_idx ON grouped_anomaly_results_index(base_id);
 
 create table if not exists onboard_dataset_metric_index (
-  dataset_name varchar(200) not null,
-  metric_name varchar(500),
-  data_source varchar(500) not null,
-  onboarded boolean,
-  base_id bigint(20) not null,
-  create_time timestamp,
-  update_time timestamp default current_timestamp,
-  version int(10)
-) ENGINE=InnoDB;
+    dataset_name varchar(200) not null,
+    metric_name varchar(500),
+    data_source varchar(500) not null,
+    onboarded boolean,
+    base_id bigint(20) not null,
+    create_time timestamp,
+    update_time timestamp default current_timestamp,
+    version int(10)
+    ) ENGINE=InnoDB;
 create index onboard_dataset_idx on onboard_dataset_metric_index(dataset_name);
 create index onboard_metric_idx on onboard_dataset_metric_index(metric_name);
 create index onboard_datasource_idx on onboard_dataset_metric_index(data_source);
@@ -318,18 +318,18 @@ create table if not exists config_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 ALTER TABLE `config_index` ADD UNIQUE `config_unique_index`(`namespace`, `name`);
 create index config_namespace_idx on config_index(namespace);
 create index config_name_idx on config_index(name);
 create index config_base_id_idx ON config_index(base_id);
 
 create table application_index (
-  base_id bigint(20) not null,
-  create_time timestamp,
-  update_time timestamp default current_timestamp,
-  application VARCHAR (200) not null,
-  recipients VARCHAR(1000) NOT NULL
+                                   base_id bigint(20) not null,
+                                   create_time timestamp,
+                                   update_time timestamp default current_timestamp,
+                                   application VARCHAR (200) not null,
+                                   recipients VARCHAR(1000) NOT NULL
 );
 create index application_application_idx on application_index(application);
 
@@ -338,7 +338,7 @@ create table if not exists alert_snapshot_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index alert_snapshot_base_id_idx ON alert_snapshot_index(base_id);
 
 create table if not exists rootcause_session_index (
@@ -354,7 +354,7 @@ create table if not exists rootcause_session_index (
     created bigint(8),
     updated bigint(8),
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index rootcause_session_name_idx on rootcause_session_index(name);
 create index rootcause_session_owner_idx on rootcause_session_index(owner);
 create index rootcause_session_previousId_idx on rootcause_session_index(previousId);
@@ -372,7 +372,7 @@ create table if not exists session_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 ALTER TABLE `session_index` ADD UNIQUE `session_unique_index`(session_key);
 create index session_base_id_idx ON session_index(base_id);
 create index session_key_idx ON session_index(session_key);
@@ -386,7 +386,7 @@ create table if not exists detection_config_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 ALTER TABLE `detection_config_index` ADD UNIQUE `detection_config_unique_index`(`name`);
 create index detection_config_base_id_idx ON detection_config_index(base_id);
 create index detection_config_name_idx ON detection_config_index(`name`);
@@ -400,7 +400,7 @@ create table if not exists detection_alert_config_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 ALTER TABLE `detection_alert_config_index` ADD UNIQUE `detection_alert_config_unique_index`(`name`);
 create index detection_alert_config_base_id_idx ON detection_alert_config_index(base_id);
 create index detection_alert_config_name_idx ON detection_alert_config_index(`name`);
@@ -416,7 +416,7 @@ create table if not exists evaluation_index (
     create_time timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 ALTER TABLE `evaluation_index` ADD UNIQUE `evaluation_index`(`detection_config_id`, `start_time`, `end_time`);
 create index evaluation_base_id_idx ON evaluation_index(base_id);
 create index evaluation_detection_config_id_idx ON evaluation_index(detection_config_id);
@@ -428,10 +428,10 @@ create table if not exists rootcause_template_index (
     application VARCHAR(128),
     owner varchar(32) not null,
     metric_id bigint(20) not null,
-    create_time timestamp default 0,
+    create_time timestamp default current_timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 ALTER TABLE `rootcause_template_index` ADD UNIQUE `rootcause_template_index`(`name`);
 create index rootcause_template_id_idx ON rootcause_template_index(base_id);
 create index rootcause_template_owner_idx ON rootcause_template_index(owner);
@@ -442,10 +442,10 @@ create table if not exists online_detection_data_index (
     base_id bigint(20) not null,
     dataset varchar(200),
     metric varchar(200),
-    create_time timestamp default 0,
+    create_time timestamp default current_timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 create index online_detection_data_id_idx ON online_detection_data_index(base_id);
 create index online_detection_data_dataset_idx ON online_detection_data_index(dataset);
 create index online_detection_data_metric_idx ON online_detection_data_index(metric);
@@ -454,10 +454,10 @@ create table if not exists anomaly_subscription_group_notification_index (
     base_id bigint(20) not null,
     anomaly_id bigint(20) not null,
     detection_config_id bigint(20) not null,
-    create_time timestamp default 0,
+    create_time timestamp default current_timestamp,
     update_time timestamp default current_timestamp,
     version int(10)
-) ENGINE=InnoDB;
+    ) ENGINE=InnoDB;
 ALTER TABLE `anomaly_subscription_group_notification_index` ADD UNIQUE `anomaly_subscription_group_notification_index`(anomaly_id);
 create index anomaly_subscription_group_anomaly_idx ON anomaly_subscription_group_notification_index(anomaly_id);
-create index anomaly_subscription_group_detection_config_idx ON anomaly_subscription_group_notification_index(anomaly_id)
+create index anomaly_subscription_group_detection_config_idx ON anomaly_subscription_group_notification_index(anomaly_id);

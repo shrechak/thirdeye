@@ -15,8 +15,8 @@ server:
     type: external
 alert: false
 autoload: false
-holidayEventsLoader: false
-mockEventsLoader: true
+holidayEventsLoader: true
+mockEventsLoader: false
 monitor: false
 pinotProxy: false
 scheduler: false
